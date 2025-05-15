@@ -6,14 +6,104 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		86F687BE2DD355E50013ED8D /* CardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F687BB2DD355E50013ED8D /* CardApp.swift */; };
+		86F687C02DD355E50013ED8D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86F687B82DD355E50013ED8D /* Preview Assets.xcassets */; };
+		86F687C12DD355E50013ED8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86F687BA2DD355E50013ED8D /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		86F687A52DD355D90013ED8D /* Card.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Card.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		86F687B82DD355E50013ED8D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		86F687BA2DD355E50013ED8D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		86F687BB2DD355E50013ED8D /* CardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardApp.swift; sourceTree = "<group>"; };
+		86F687CE2DD35FB30013ED8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		86F687A72DD355D90013ED8D /* Card */ = {
+		86B41ADE2DD3CE5B003B6888 /* CardShopHintModule */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Card;
+			path = CardShopHintModule;
+			sourceTree = "<group>";
+		};
+		86B41AE52DD3D1BF003B6888 /* CardShopUndoModule */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardShopUndoModule;
+			sourceTree = "<group>";
+		};
+		86B41AEC2DD3D268003B6888 /* CardInfoModule */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardInfoModule;
+			sourceTree = "<group>";
+		};
+		86B41BE62DD3DAC7003B6888 /* CardDailyModule */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardDailyModule;
+			sourceTree = "<group>";
+		};
+		86B41BED2DD3DD97003B6888 /* CardWinModule */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardWinModule;
+			sourceTree = "<group>";
+		};
+		86B41BF42DD3DDEF003B6888 /* CardLoseModule */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardLoseModule;
+			sourceTree = "<group>";
+		};
+		86B41BFB2DD3DE54003B6888 /* CardPauseModule */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardPauseModule;
+			sourceTree = "<group>";
+		};
+		86B41C022DD3E0C6003B6888 /* CardSpiderGameModule */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardSpiderGameModule;
+			sourceTree = "<group>";
+		};
+		86E14D8E2DD52444004113E9 /* CardAgnesGameModule */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardAgnesGameModule;
+			sourceTree = "<group>";
+		};
+		86EFC7292DD6294300EDBE94 /* CardCarpetGameModule */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardCarpetGameModule;
+			sourceTree = "<group>";
+		};
+		86EFC88E2DD658BB00EDBE94 /* UserDefaultsManager */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UserDefaultsManager;
+			sourceTree = "<group>";
+		};
+		86F687C22DD355EB0013ED8D /* CardCustomButtons */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardCustomButtons;
+			sourceTree = "<group>";
+		};
+		86F687C82DD356140013ED8D /* CardFonts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardFonts;
+			sourceTree = "<group>";
+		};
+		86F687C92DD3561A0013ED8D /* CardExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardExtension;
+			sourceTree = "<group>";
+		};
+		86F688C62DD361EF0013ED8D /* CardLoadingModule */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardLoadingModule;
+			sourceTree = "<group>";
+		};
+		86F6893F2DD3664C0013ED8D /* CardMenuModule */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardMenuModule;
+			sourceTree = "<group>";
+		};
+		86F68B1F2DD37A210013ED8D /* CardShopModule */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CardShopModule;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -32,7 +122,7 @@
 		86F6879C2DD355D90013ED8D = {
 			isa = PBXGroup;
 			children = (
-				86F687A72DD355D90013ED8D /* Card */,
+				86F687BD2DD355E50013ED8D /* Card */,
 				86F687A62DD355D90013ED8D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +133,50 @@
 				86F687A52DD355D90013ED8D /* Card.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		86F687B72DD355E50013ED8D /* CardHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				86F687C82DD356140013ED8D /* CardFonts */,
+				86F687C22DD355EB0013ED8D /* CardCustomButtons */,
+			);
+			path = CardHelpers;
+			sourceTree = "<group>";
+		};
+		86F687B92DD355E50013ED8D /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				86F687B82DD355E50013ED8D /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		86F687BD2DD355E50013ED8D /* Card */ = {
+			isa = PBXGroup;
+			children = (
+				86EFC88E2DD658BB00EDBE94 /* UserDefaultsManager */,
+				86EFC7292DD6294300EDBE94 /* CardCarpetGameModule */,
+				86E14D8E2DD52444004113E9 /* CardAgnesGameModule */,
+				86B41C022DD3E0C6003B6888 /* CardSpiderGameModule */,
+				86B41BFB2DD3DE54003B6888 /* CardPauseModule */,
+				86B41BF42DD3DDEF003B6888 /* CardLoseModule */,
+				86B41BED2DD3DD97003B6888 /* CardWinModule */,
+				86B41BE62DD3DAC7003B6888 /* CardDailyModule */,
+				86B41AEC2DD3D268003B6888 /* CardInfoModule */,
+				86B41AE52DD3D1BF003B6888 /* CardShopUndoModule */,
+				86B41ADE2DD3CE5B003B6888 /* CardShopHintModule */,
+				86F68B1F2DD37A210013ED8D /* CardShopModule */,
+				86F6893F2DD3664C0013ED8D /* CardMenuModule */,
+				86F688C62DD361EF0013ED8D /* CardLoadingModule */,
+				86F687C92DD3561A0013ED8D /* CardExtension */,
+				86F687B72DD355E50013ED8D /* CardHelpers */,
+				86F687B92DD355E50013ED8D /* Preview Content */,
+				86F687BA2DD355E50013ED8D /* Assets.xcassets */,
+				86F687BB2DD355E50013ED8D /* CardApp.swift */,
+				86F687CE2DD35FB30013ED8D /* Info.plist */,
+			);
+			path = Card;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -61,7 +195,23 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				86F687A72DD355D90013ED8D /* Card */,
+				86B41ADE2DD3CE5B003B6888 /* CardShopHintModule */,
+				86B41AE52DD3D1BF003B6888 /* CardShopUndoModule */,
+				86B41AEC2DD3D268003B6888 /* CardInfoModule */,
+				86B41BE62DD3DAC7003B6888 /* CardDailyModule */,
+				86B41BED2DD3DD97003B6888 /* CardWinModule */,
+				86B41BF42DD3DDEF003B6888 /* CardLoseModule */,
+				86B41BFB2DD3DE54003B6888 /* CardPauseModule */,
+				86B41C022DD3E0C6003B6888 /* CardSpiderGameModule */,
+				86E14D8E2DD52444004113E9 /* CardAgnesGameModule */,
+				86EFC7292DD6294300EDBE94 /* CardCarpetGameModule */,
+				86EFC88E2DD658BB00EDBE94 /* UserDefaultsManager */,
+				86F687C22DD355EB0013ED8D /* CardCustomButtons */,
+				86F687C82DD356140013ED8D /* CardFonts */,
+				86F687C92DD3561A0013ED8D /* CardExtension */,
+				86F688C62DD361EF0013ED8D /* CardLoadingModule */,
+				86F6893F2DD3664C0013ED8D /* CardMenuModule */,
+				86F68B1F2DD37A210013ED8D /* CardShopModule */,
 			);
 			name = Card;
 			packageProductDependencies = (
@@ -109,6 +259,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86F687C02DD355E50013ED8D /* Preview Assets.xcassets in Resources */,
+				86F687C12DD355E50013ED8D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +271,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86F687BE2DD355E50013ED8D /* CardApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,11 +408,12 @@
 				DEVELOPMENT_TEAM = 59WWFG63NN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Card/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -284,11 +438,12 @@
 				DEVELOPMENT_TEAM = 59WWFG63NN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Card/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
