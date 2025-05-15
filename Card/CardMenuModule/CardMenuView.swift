@@ -171,6 +171,7 @@ struct CardMenuView: View {
                                     if cardMenuModel.canTransition() {
                                         cardMenuModel.recordTransition()
                                         cardMenuModel.isDaily = true
+                                        UserDefaultsManager().completeLevel()
                                     }
                                 }) {
                                     if cardMenuModel.canTransition() {

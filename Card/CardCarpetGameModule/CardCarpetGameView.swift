@@ -664,6 +664,9 @@ struct CardCarpetGameView: View {
             
             if gameModel.isWin {
                 CardWinView()
+                    .onAppear() {
+                        UserDefaultsManager().completeLevel()
+                    }
             }
             
             if gameModel.isPause {
