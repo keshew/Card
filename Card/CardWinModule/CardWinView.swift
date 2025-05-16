@@ -8,7 +8,7 @@ struct CardWinView: View {
         if UIDevice.current.userInterfaceIdiom == .pad {
             if verticalSizeClass == .regular {
                 ZStack {
-                    Color.black.opacity(0.5).ignoresSafeArea()
+                    Color.black.opacity(0.8).ignoresSafeArea()
                     
                     Image(.shyt3)
                         .resizable()
@@ -103,7 +103,7 @@ struct CardWinView: View {
         } else {
             if verticalSizeClass == .compact {
                 ZStack {
-                    Color.black.opacity(0.5).ignoresSafeArea()
+                    Color.black.opacity(0.8).ignoresSafeArea()
                     
                     Image(.shyt3)
                         .resizable()

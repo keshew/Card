@@ -16,7 +16,7 @@ struct CardInfoView: View {
         if UIDevice.current.userInterfaceIdiom == .pad {
             if verticalSizeClass == .regular {
                 ZStack {
-                    Color.black.opacity(0.5).ignoresSafeArea()
+                    Color.black.opacity(0.8).ignoresSafeArea()
                     
                     if cardInfoModel.currentIndex == 1 {
                         Image(.shyt2)
@@ -151,7 +151,7 @@ struct CardInfoView: View {
         } else {
             if verticalSizeClass == .compact {
                 ZStack {
-                    Color.black.opacity(0.5).ignoresSafeArea()
+                    Color.black.opacity(0.8).ignoresSafeArea()
                     
                     if cardInfoModel.currentIndex == 1 {
                         Image(.shyt2)
