@@ -82,7 +82,7 @@ struct CardMenuView: View {
                                                             .aspectRatio(contentMode: .fit)
                                                             .frame(width: 60, height: 60)
                                                             .overlay {
-                                                                Text("\(UIScreen.main.bounds.width)")
+                                                                Text("SHOP")
                                                                     .CustomFont(size: 22, width: 0.3)
                                                             }
                                                     }
@@ -455,7 +455,7 @@ struct CardMenuView: View {
         } else if width > 1200 {
             return 205
         } else {
-            return 660
+            return 155
         }
     }
 }
