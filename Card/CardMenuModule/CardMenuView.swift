@@ -82,7 +82,7 @@ struct CardMenuView: View {
                                                             .aspectRatio(contentMode: .fit)
                                                             .frame(width: 60, height: 60)
                                                             .overlay {
-                                                                Text("SHOP")
+                                                                Text("\(UIScreen.main.bounds.width)")
                                                                     .CustomFont(size: 22, width: 0.3)
                                                             }
                                                     }
@@ -204,7 +204,7 @@ struct CardMenuView: View {
                                 .disabled(!cardMenuModel.canTransition())
                             }
                             .padding(.trailing, 30)
-                            .padding(.top, 305)
+                            .padding(.top, getSpacing(for: UIScreen.main.bounds.width))
                         }
                     }
                     .scrollDisabled(UIScreen.main.bounds.height > 390 ? true : false)
@@ -446,6 +446,16 @@ struct CardMenuView: View {
                     CardCarpetGameView()
                 }
             }
+        }
+    }
+    
+    func getSpacing(for width: CGFloat) -> CGFloat {
+        if width > 1370 {
+            return 305
+        } else if width > 1200 {
+            return 205
+        } else {
+            return 660
         }
     }
 }

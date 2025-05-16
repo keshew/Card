@@ -115,7 +115,7 @@ struct CardInfoView: View {
                                     }
                                     .frame(width: 520, height: 270)
                                     .padding(.leading, 200)
-                                    .padding(.top, 400)
+                                    .padding(.top, getSpacing(for: UIScreen.main.bounds.width))
                                 
                                 if cardInfoModel.currentIndex != 1 {
                                     Spacer()
@@ -282,6 +282,16 @@ struct CardInfoView: View {
                         }
                 )
             }
+        }
+    }
+    
+    func getSpacing(for width: CGFloat) -> CGFloat {
+        if width > 1370 {
+            return 400
+        } else if width > 1200 {
+            return 300
+        } else {
+            return 660
         }
     }
 }

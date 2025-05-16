@@ -39,6 +39,11 @@ class SpiderGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         createTappedNode()
         createCards()
         createCardColoda()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateHintLabel), name: .updateHintLabel, object: nil)
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -53,6 +58,18 @@ class SpiderGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         }
     }
 
+    @objc func updateHintLabel() {
+        countHint.attributedText = NSAttributedString(
+            string: "\(UserDefaultsManager.defaults.integer(forKey: Keys.hintCount.rawValue))",
+            attributes: [
+                .font: UIFont(name: "Gidugu", size: 24)!,
+                .foregroundColor: UIColor.white,
+                .strokeColor: UIColor(red: 255/255, green: 245/255, blue: 0/255, alpha: 1),
+                .strokeWidth: -4.5
+            ]
+        )
+    }
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard isDragging else { return }
         isDragging = false
@@ -148,8 +165,6 @@ class SpiderGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         guard card.isFaceUp else { return }
         let sequence = Array(column[cardIndex...])
         guard isValidDescendingSequence(sequence) else { return }
-
-     
         
         selectedCards = sequence
         selectedNodes = sequence.compactMap { $0.node }
@@ -254,7 +269,12 @@ struct CardSpiderGameView: View {
             SpriteView(scene: cardSpiderGameModel.createGameScene(gameData: gameModel))
                 .ignoresSafeArea()
                 .navigationBarBackButtonHidden(true)
-            
+                .onChange(of: gameModel.isHintShop) { newValue in
+                    if newValue == false {
+                        NotificationCenter.default.post(name: .updateHintLabel, object: nil)
+                    }
+                }
+
             if gameModel.isWin {
                 CardWinView()
                     .onAppear() {
@@ -281,3 +301,6 @@ struct CardSpiderGameView: View {
     CardSpiderGameView()
 }
 
+extension Notification.Name {
+    static let updateHintLabel = Notification.Name("updateHintLabel")
+}

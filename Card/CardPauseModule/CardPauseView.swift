@@ -89,7 +89,7 @@ struct CardPauseView: View {
                                     }
                                     .frame(width: 520, height: 270)
                                     .padding(.leading, 170)
-                                    .padding(.top, 400)
+                                    .padding(.top, getSpacing(for: UIScreen.main.bounds.width))
                                 
                                 Spacer()
                             }
@@ -139,7 +139,7 @@ struct CardPauseView: View {
                                     .frame(width: 120, height: 70)
                                     .overlay {
                                         HStack(spacing: 1) {
-                                            Text("1000")
+                                            Text("\(UserDefaultsManager.defaults.integer(forKey: Keys.money.rawValue))")
                                                 .CustomFont(size: 35, width: 0.4)
                                             
                                             Image(.coin)
@@ -196,6 +196,16 @@ struct CardPauseView: View {
                     CardMenuView()
                 }
             }
+        }
+    }
+    
+    func getSpacing(for width: CGFloat) -> CGFloat {
+        if width > 1370 {
+            return 400
+        } else if width > 1200 {
+            return 300
+        } else {
+            return 660
         }
     }
 }

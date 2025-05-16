@@ -27,7 +27,6 @@ struct GameState {
     var currentNewCard: SolitaireCard?
 }
 
-
 class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
     var game: AgnesGameData?
     var columns: [[SolitaireCard]] = Array(repeating: [], count: 7)
@@ -61,6 +60,10 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         addChild(gameBackground)
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
         size = UIScreen.main.bounds.size
@@ -69,74 +72,7 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         createCards()
         createFourCard()
         createAdditionalColoda()
-    }
-    
-    func saveCurrentState() {
-        let state = GameState(
-            columns: columns,
-            foundationPiles: foundationPiles,
-            stockCards: stockCards,
-            wasteCards: wasteCards,
-            currentNewCard: currentNewCard
-        )
-        gameStatesStack.append(state)
-        
-        if gameStatesStack.count > 50 {
-            gameStatesStack.removeFirst()
-        }
-    }
-    
-    func undoLastMove() {
-        guard gameStatesStack.count > 1 else { return }
-        
-        gameStatesStack.removeLast()
-        
-        if let prevState = gameStatesStack.last {
-            columns = prevState.columns
-            foundationPiles = prevState.foundationPiles
-            stockCards = prevState.stockCards
-            wasteCards = prevState.wasteCards
-            currentNewCard = prevState.currentNewCard
-            
-            removeAllCards()
-            renderColumns()
-            renderFoundations()
-            
-            if let card = currentNewCard, let node = card.node {
-                node.position = CGPoint(x: size.width / 1.85, y: size.height / 9)
-                addChild(node)
-            }
-        }
-    }
-    
-    
-    func restartGame() {
-        deck.removeAll()
-        currentCardIndex = 0
-        columns = Array(repeating: [], count: 7)
-        additinalCards.forEach { $0.node?.removeFromParent() }
-        additinalCards.removeAll()
-        wasteCards.forEach { $0.node?.removeFromParent() }
-        wasteCards.removeAll()
-        foundationPiles = Array(repeating: [], count: 4)
-        selectedCard = nil
-        selectedCardOriginalPosition = nil
-        selectedCardColumnIndex = nil
-        selectedCardRowIndex = nil
-        currentNewCard?.node?.removeFromParent()
-        currentNewCard = nil
-        game?.isWin = false
-        
-        removeAllChildren()
-        
-        
-        createMainNode()
-        createTappedNode()
-        createCards()
-        createAdditionalColoda()
-        renderFoundations()
-        renderColumns()
-        createFourCard()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateHintAndUndoLabels), name: .updateHintAndUndoLabels, object: nil)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -211,122 +147,12 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
-    func textureName(for card: SolitaireCard) -> String {
-        let suitName = card.suit.lowercased()
-        switch card.rank {
-        case 1:
-            return "\(suitName)A"
-        case 11:
-            return "\(suitName)Jack"
-        case 12:
-            return "\(suitName)Queen"
-        case 13:
-            return "\(suitName)King"
-        default:
-            return "\(suitName)\(card.rank)"
-        }
-    }
-    
-    func dealCardFromAdditionalDeck() {
-        guard !additinalCards.isEmpty else { return }
-        saveCurrentState()
-        
-        var card = additinalCards.removeLast()
-        card.node?.removeFromParent()
-        
-        let texName = textureName(for: card)
-        print(texName)
-        let node = SKSpriteNode(imageNamed: texName)
-        node.size = CGSize(width: 45, height: 65)
-        node.position = CGPoint(x: size.width / 1.85, y: size.height / 9)
-        node.name = "newCard"
-        node.zPosition = 100
-        addChild(node)
-        card.node = node
-        card.isFaceUp = true
-        currentNewCard = card
-        
-        for child in children {
-            if child.name == "newCard" && child != node {
-                child.removeFromParent()
-            }
-        }
-    }
-    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first, let card = selectedCard else { return }
         let location = touch.location(in: self)
         card.node?.position = location
     }
-    
-    func highlightCard(_ card: SolitaireCard) {
-        guard let node = card.node else { return }
-        
-        let scaleUp = SKAction.scale(to: 1.2, duration: 0.15)
-        let scaleDown = SKAction.scale(to: 1.0, duration: 0.15)
-        let pulse = SKAction.sequence([scaleUp, scaleDown])
-        let repeatPulse = SKAction.repeat(pulse, count: 10)
-        
-        node.run(repeatPulse, withKey: "hintHighlight")
-        
-        let wait = SKAction.wait(forDuration: 3.0)
-        let reset = SKAction.run {
-            node.setScale(1.0)
-            node.removeAction(forKey: "hintHighlight")
-        }
-        node.run(SKAction.sequence([wait, reset]))
-    }
-    
-    func removeHintHighlight() {
-        for column in columns {
-            for card in column {
-                card.node?.removeAction(forKey: "hintHighlight")
-                card.node?.setScale(1.0)
-            }
-        }
-        currentNewCard?.node?.removeAction(forKey: "hintHighlight")
-        currentNewCard?.node?.setScale(1.0)
-    }
-    
-    
-    func showHint() {
-        removeHintHighlight()
-        
-        for (colIdx, column) in columns.enumerated() {
-            for (_, card) in column.enumerated() where card.isFaceUp {
-                for targetColIdx in 0..<columns.count where targetColIdx != colIdx {
-                    if canMove(card: card, toColumn: targetColIdx) {
-                        highlightCard(card)
-                        return
-                    }
-                }
-                for foundationIndex in 0..<foundationPiles.count {
-                    if canPlaceOnFoundation(card: card, foundationIndex: foundationIndex) {
-                        highlightCard(card)
-                        return
-                    }
-                }
-            }
-        }
-        
-        if let card = currentNewCard {
-            for foundationIndex in 0..<foundationPiles.count {
-                if canPlaceOnFoundation(card: card, foundationIndex: foundationIndex) {
-                    highlightCard(card)
-                    return
-                }
-            }
-            for targetColIdx in 0..<columns.count {
-                if canMove(card: card, toColumn: targetColIdx) {
-                    highlightCard(card)
-                    return
-                }
-            }
-        }
-    }
-    
-    
+  
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let card = selectedCard else { return }
         let location = touches.first!.location(in: self)
@@ -403,28 +229,6 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         selectedCardOriginalPosition = nil
         selectedCardColumnIndex = nil
         selectedCardRowIndex = nil
-    }
-    
-    
-    func flipTopCardIfNeeded(inColumn colIdx: Int) {
-        guard !columns[colIdx].isEmpty else { return }
-        var topCard = columns[colIdx].last!
-        if !topCard.isFaceUp {
-            topCard.isFaceUp = true
-            if let node = topCard.node {
-                let texName = textureName(for: topCard)
-                node.texture = SKTexture(imageNamed: texName)
-            }
-            columns[colIdx][columns[colIdx].count - 1] = topCard
-        }
-    }
-    
-    func removeAllCards() {
-        for child in children {
-            if child.name == "card" {
-                child.removeFromParent()
-            }
-        }
     }
     
     func createTappedNode() {
@@ -542,14 +346,25 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
 
     }
     
-    func canMove(card: SolitaireCard, toColumn: Int) -> Bool {
-        let targetColumn = columns[toColumn]
-        if let last = targetColumn.last, last.isFaceUp {
-            return last.rank == card.rank + 1 && last.suit != card.suit
-        } else if targetColumn.isEmpty {
-            return card.rank == 13
-        }
-        return false
+    @objc func updateHintAndUndoLabels() {
+        countHint.attributedText = NSAttributedString(
+            string: "\(UserDefaultsManager.defaults.integer(forKey: Keys.hintCount.rawValue))",
+            attributes: [
+                .font: UIFont(name: "Gidugu", size: 24)!,
+                .foregroundColor: UIColor.white,
+                .strokeColor: UIColor(red: 255/255, green: 245/255, blue: 0/255, alpha: 1),
+                .strokeWidth: -4.5
+            ]
+        )
+        countUndo.attributedText = NSAttributedString(
+            string: "\(UserDefaultsManager.defaults.integer(forKey: Keys.undoCount.rawValue))",
+            attributes: [
+                .font: UIFont(name: "Gidugu", size: 24)!,
+                .foregroundColor: UIColor.white,
+                .strokeColor: UIColor(red: 255/255, green: 245/255, blue: 0/255, alpha: 1),
+                .strokeWidth: -4.5
+            ]
+        )
     }
 }
 
@@ -562,6 +377,16 @@ struct CardAgnesGameView: View {
             SpriteView(scene: cardAgnesGameModel.createGameScene(gameData: gameModel))
                 .ignoresSafeArea()
                 .navigationBarBackButtonHidden(true)
+                .onChange(of: gameModel.isHintShop) { newValue in
+                        if !newValue {
+                            NotificationCenter.default.post(name: .updateHintAndUndoLabels, object: nil)
+                        }
+                    }
+                .onChange(of: gameModel.isUndoShop) { newValue in
+                    if !newValue {
+                        NotificationCenter.default.post(name: .updateHintAndUndoLabels, object: nil)
+                    }
+                }
             
             if gameModel.isWin {
                 CardWinView()
@@ -591,4 +416,8 @@ struct CardAgnesGameView: View {
 
 #Preview {
     CardAgnesGameView()
+}
+
+extension Notification.Name {
+    static let updateHintAndUndoLabels = Notification.Name("updateHintAndUndoLabels")
 }

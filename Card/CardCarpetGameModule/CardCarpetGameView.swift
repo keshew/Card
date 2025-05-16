@@ -70,6 +70,32 @@ class CarpetGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         createCards()
         createFourCard()
         createFourCard2()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateHintAndUndoLabels), name: .updateHintAndUndoLabels, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func updateHintAndUndoLabels() {
+        countHint.attributedText = NSAttributedString(
+            string: "\(UserDefaultsManager.defaults.integer(forKey: Keys.hintCount.rawValue))",
+            attributes: [
+                .font: UIFont(name: "Gidugu", size: 24)!,
+                .foregroundColor: UIColor.white,
+                .strokeColor: UIColor(red: 255/255, green: 245/255, blue: 0/255, alpha: 1),
+                .strokeWidth: -4.5
+            ]
+        )
+        countUndo.attributedText = NSAttributedString(
+            string: "\(UserDefaultsManager.defaults.integer(forKey: Keys.undoCount.rawValue))",
+            attributes: [
+                .font: UIFont(name: "Gidugu", size: 24)!,
+                .foregroundColor: UIColor.white,
+                .strokeColor: UIColor(red: 255/255, green: 245/255, blue: 0/255, alpha: 1),
+                .strokeWidth: -4.5
+            ]
+        )
     }
     
     func saveGameState() {
@@ -104,38 +130,29 @@ class CarpetGameSpriteKit: SKScene, SKPhysicsContactDelegate {
     }
     
     func restartGame() {
-        deck.removeAll()
-        currentCardIndex = 0
-        columns = Array(repeating: [], count: 7)
-        additinalCards.forEach { $0.node?.removeFromParent() }
-        additinalCards.removeAll()
-        wasteCards.forEach { $0.node?.removeFromParent() }
-        wasteCards.removeAll()
-        foundationPiles = Array(repeating: [], count: 8)
-        selectedCard = nil
-        selectedCardOriginalPosition = nil
-        selectedCardColumnIndex = nil
-        selectedCardRowIndex = nil
-        currentNewCard?.node?.removeFromParent()
-        currentNewCard = nil
-        game?.isWin = false
-        
-        removeAllChildren()
-        
-        
-        createMainNode()
-        createTappedNode()
-        createCards()
-        renderFoundations()
-        renderColumns()
-        createFourCard()
-        createFourCard2()
+        if let view = self.view {
+            let newScene = CarpetGameSpriteKit(size: self.size)
+            newScene.game = self.game
+            view.presentScene(newScene, transition: .fade(withDuration: 0))
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         let nodes = nodes(at: location)
+        
+        if let _ = nodes.first(where: { $0.name == "pause"}) {
+            game?.isPause = true
+        }
+        
+        if let _ = nodes.first(where: { $0.name == "info" || $0.name == "infoBack" }) {
+            game?.isInfo = true
+        }
+        
+        if let _ = nodes.first(where: { $0.name == "restart" || $0.name == "restartBack" }) {
+            restartGame()
+        }
         
         if let _ = nodes.first(where: { $0.name == "hint" || $0.name == "hintBack" }) {
             if UserDefaultsManager.defaults.integer(forKey: Keys.hintCount.rawValue) > 0 {
@@ -152,17 +169,7 @@ class CarpetGameSpriteKit: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        if let _ = nodes.first(where: { $0.name == "pause"}) {
-            game?.isPause = true
-        }
-        
-        if let _ = nodes.first(where: { $0.name == "info" || $0.name == "infoBack" }) {
-            game?.isInfo = true
-        }
-        
-        if let _ = nodes.first(where: { $0.name == "restart" || $0.name == "restartBack" }) {
-            restartGame()
-        }
+   
         
         if let _ = nodes.first(where: { $0.name == "undo" || $0.name == "undoBack" }) {
             if UserDefaultsManager.defaults.integer(forKey: Keys.undoCount.rawValue) > 0 {
@@ -661,6 +668,16 @@ struct CardCarpetGameView: View {
             SpriteView(scene: cardCarpetGameModel.createGameScene(gameData: gameModel))
                 .ignoresSafeArea()
                 .navigationBarBackButtonHidden(true)
+                .onChange(of: gameModel.isHintShop) { newValue in
+                        if !newValue {
+                            NotificationCenter.default.post(name: .updateHintAndUndoLabels, object: nil)
+                        }
+                    }
+                .onChange(of: gameModel.isUndoShop) { newValue in
+                    if !newValue {
+                        NotificationCenter.default.post(name: .updateHintAndUndoLabels, object: nil)
+                    }
+                }
             
             if gameModel.isWin {
                 CardWinView()
