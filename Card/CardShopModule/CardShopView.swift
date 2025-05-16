@@ -9,7 +9,7 @@ struct CardShopView: View {
         if UIDevice.current.userInterfaceIdiom == .pad {
             if verticalSizeClass == .regular {
                 ZStack {
-                    Color.black.opacity(0.5).ignoresSafeArea()
+                    Color.black.opacity(0.8).ignoresSafeArea()
                     
                     ScrollView(showsIndicators: false) {
                         VStack {
@@ -92,7 +92,7 @@ struct CardShopView: View {
         } else {
             if verticalSizeClass == .compact {
                 ZStack {
-                    Color.black.opacity(0.5).ignoresSafeArea()
+                    Color.black.opacity(0.8).ignoresSafeArea()
                     
                     ScrollView(showsIndicators: false) {
                         VStack {

@@ -80,7 +80,7 @@ struct CardShopUndoView: View {
                                         .offset(y: -40)
                                         .overlay {
                                             Button(action: {
-                                                ud.buyBonus(key: Keys.hintCount.rawValue)
+                                                ud.buyBonus(key: Keys.undoCount.rawValue)
                                                 cardShopUndoModel.again = 1
                                             }) {
                                                 Image(.buy)

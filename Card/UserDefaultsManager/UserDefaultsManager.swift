@@ -46,6 +46,7 @@ class UserDefaultsManager: ObservableObject {
         let countOfBonus = UserDefaultsManager.defaults.integer(forKey: key)
         if countOfMoney >= 30 {
             UserDefaultsManager.defaults.set(countOfBonus + 1, forKey: key)
+            UserDefaultsManager.defaults.set(countOfMoney - 30, forKey: Keys.money.rawValue)
         }
     }
     
