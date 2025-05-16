@@ -181,33 +181,13 @@ extension AgnesGameSpriteKit {
     
     
     func restartGame() {
-        deck.removeAll()
-        currentCardIndex = 0
-        columns = Array(repeating: [], count: 7)
-        additinalCards.forEach { $0.node?.removeFromParent() }
-        additinalCards.removeAll()
-        wasteCards.forEach { $0.node?.removeFromParent() }
-        wasteCards.removeAll()
-        foundationPiles = Array(repeating: [], count: 4)
-        selectedCard = nil
-        selectedCardOriginalPosition = nil
-        selectedCardColumnIndex = nil
-        selectedCardRowIndex = nil
-        currentNewCard?.node?.removeFromParent()
-        currentNewCard = nil
-        game?.isWin = false
-        
-        removeAllChildren()
-        
-        
-        createMainNode()
-        createTappedNode()
-        createCards()
-        createAdditionalColoda()
-        renderFoundations()
-        renderColumns()
-        createFourCard()
+        if let view = self.view {
+            let newScene = AgnesGameSpriteKit(size: self.size)
+            newScene.game = self.game
+            view.presentScene(newScene, transition: .fade(withDuration: 0))
+        }
     }
+
     
     
     func createFourCard() {
@@ -247,6 +227,9 @@ extension AgnesGameSpriteKit {
 
     
     func canPlaceOnFoundation(card: SolitaireCard, foundationIndex: Int) -> Bool {
+        guard foundationIndex >= 0 && foundationIndex < foundationPiles.count else {
+            return false
+        }
         let pile = foundationPiles[foundationIndex]
         if pile.isEmpty {
             return card.rank == 1
@@ -263,7 +246,8 @@ extension AgnesGameSpriteKit {
         var allCards: [SolitaireCard] = []
         for suit in suits {
             for rank in 1...13 {
-                let card = SolitaireCard(name: "\(rank)_\(suit)", suit: suit, rank: rank, isFaceUp: false, node: nil)
+                let card = SolitaireCard(name: "\(suit)\(rank)", suit: suit, rank: rank, isFaceUp: false, node: nil)
+                print(card.name)
                 allCards.append(card)
             }
         }
@@ -294,7 +278,7 @@ extension AgnesGameSpriteKit {
         let selectedItem = UserDefaultsManager().getSelectedShopItem()
         let suits = ["\(selectedItem?.name ?? "")tiles", "\(selectedItem?.name ?? "")pickes", "\(selectedItem?.name ?? "")heats", "\(selectedItem?.name ?? "")clovers"]
         let ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
-        for _ in 0..<2 {
+        for _ in 0..<1 {
             for suit in suits {
                 for rank in ranks {
                     deck.append("\(suit)\(rank)")

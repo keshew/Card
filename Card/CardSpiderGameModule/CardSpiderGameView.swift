@@ -99,23 +99,12 @@ class SpiderGameSpriteKit: SKScene, SKPhysicsContactDelegate {
     }
     
     func restartGame() {
-        deck.removeAll()
-        currentCardIndex = 0
-        columns = Array(repeating: [], count: 10)
-        selectedCards.removeAll()
-        additinalCards.forEach { $0.removeFromParent() }
-        additinalCards.removeAll()
-        remainingDeals = 5
-        game?.isWin = false
-
-        removeAllChildren()
-
-        createMainNode()
-        createTappedNode()
-        createCards()
-        createCardColoda()
+        if let view = self.view {
+            let newScene = SpiderGameSpriteKit(size: self.size)
+            newScene.game = self.game
+            view.presentScene(newScene, transition: .fade(withDuration: 0))
+        }
     }
-
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }

@@ -21,6 +21,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		869FB6F52DD79C8500AE5254 /* Managers */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		86B41ADE2DD3CE5B003B6888 /* CardShopHintModule */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = CardShopHintModule;
@@ -69,11 +74,6 @@
 		86EFC7292DD6294300EDBE94 /* CardCarpetGameModule */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = CardCarpetGameModule;
-			sourceTree = "<group>";
-		};
-		86EFC88E2DD658BB00EDBE94 /* UserDefaultsManager */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = UserDefaultsManager;
 			sourceTree = "<group>";
 		};
 		86F687C22DD355EB0013ED8D /* CardCustomButtons */ = {
@@ -155,7 +155,7 @@
 		86F687BD2DD355E50013ED8D /* Card */ = {
 			isa = PBXGroup;
 			children = (
-				86EFC88E2DD658BB00EDBE94 /* UserDefaultsManager */,
+				869FB6F52DD79C8500AE5254 /* Managers */,
 				86EFC7292DD6294300EDBE94 /* CardCarpetGameModule */,
 				86E14D8E2DD52444004113E9 /* CardAgnesGameModule */,
 				86B41C022DD3E0C6003B6888 /* CardSpiderGameModule */,
@@ -195,6 +195,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				869FB6F52DD79C8500AE5254 /* Managers */,
 				86B41ADE2DD3CE5B003B6888 /* CardShopHintModule */,
 				86B41AE52DD3D1BF003B6888 /* CardShopUndoModule */,
 				86B41AEC2DD3D268003B6888 /* CardInfoModule */,
@@ -205,7 +206,6 @@
 				86B41C022DD3E0C6003B6888 /* CardSpiderGameModule */,
 				86E14D8E2DD52444004113E9 /* CardAgnesGameModule */,
 				86EFC7292DD6294300EDBE94 /* CardCarpetGameModule */,
-				86EFC88E2DD658BB00EDBE94 /* UserDefaultsManager */,
 				86F687C22DD355EB0013ED8D /* CardCustomButtons */,
 				86F687C82DD356140013ED8D /* CardFonts */,
 				86F687C92DD3561A0013ED8D /* CardExtension */,

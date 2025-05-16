@@ -236,19 +236,24 @@ extension SpiderGameSpriteKit {
         
         let fromCards = columns[fromColumn].suffix(fromIndex)
         for card in fromCards {
-            card.node?.run(SKAction.sequence([
-                SKAction.scale(to: 1.1, duration: 0.3),
-                SKAction.scale(to: 1.0, duration: 0.3)
-            ]))
+            let scaleUp = SKAction.scale(to: 1.1, duration: 0.5) 
+            let scaleDown = SKAction.scale(to: 1.0, duration: 0.5)
+            let pulse = SKAction.sequence([scaleUp, scaleDown])
+            let repeatPulse = SKAction.repeat(pulse, count: 10)
+            
+            card.node?.run(repeatPulse, withKey: "highlightPulse")
         }
         
         if let toCard = columns[toColumn].last {
-            toCard.node?.run(SKAction.sequence([
-                SKAction.fadeAlpha(to: 0.5, duration: 0.3),
-                SKAction.fadeAlpha(to: 1.0, duration: 0.3)
-            ]))
+            let fadeOut = SKAction.fadeAlpha(to: 0.5, duration: 0.5)
+            let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: 0.5)
+            let fadePulse = SKAction.sequence([fadeOut, fadeIn])
+            let repeatFade = SKAction.repeat(fadePulse, count: 5)
+            
+            toCard.node?.run(repeatFade, withKey: "highlightFade")
         }
     }
+
     
     func removeAllHighlights() {
         for column in columns {

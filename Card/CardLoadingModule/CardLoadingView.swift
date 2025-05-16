@@ -3,6 +3,7 @@ import SwiftUI
 struct CardLoadingView: View {
     @StateObject var cardLoadingModel =  CardLoadingViewModel()
     @Environment(\.verticalSizeClass) var verticalSizeClass
+    @ObservedObject private var soundManager = SoundManager.shared
     
     var body: some View {
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -38,6 +39,7 @@ struct CardLoadingView: View {
                 }
                 .onAppear() {
                     cardLoadingModel.increaseWidth()
+                    soundManager.playBackgroundMusic()
                 }
                 
                 .fullScreenCover(isPresented: $cardLoadingModel.isAnimationDone) {
@@ -78,6 +80,7 @@ struct CardLoadingView: View {
                 }
                 .onAppear() {
                     cardLoadingModel.increaseWidth()
+                    soundManager.playBackgroundMusic()
                 }
                 
                 .fullScreenCover(isPresented: $cardLoadingModel.isAnimationDone) {

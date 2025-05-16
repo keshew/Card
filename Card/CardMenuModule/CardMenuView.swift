@@ -4,6 +4,8 @@ struct CardMenuView: View {
     @StateObject var cardMenuModel =  CardMenuViewModel()
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @State var isShop = false
+    @ObservedObject private var soundManager = SoundManager.shared
+    @State var ud = UserDefaultsManager()
     
     var body: some View {
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -30,18 +32,25 @@ struct CardMenuView: View {
                                         .overlay {
                                             HStack {
                                                 Button(action: {
-                                                    cardMenuModel.isMusic.toggle()
+                                                    soundManager.toggleMusic()
+                                                    
+                                                    if ud.isMusicEnabled() {
+                                                        soundManager.playBackgroundMusic()
+                                                    } else {
+                                                        soundManager.stopBackgroundMusic()
+                                                    }
                                                 }) {
-                                                    Image(cardMenuModel.isMusic ? .music : .musicOff)
+                                                    Image(ud.isMusicEnabled() ? .music : .musicOff)
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
                                                         .frame(width: 60, height: 60)
                                                 }
                                                 
                                                 Button(action: {
-                                                    cardMenuModel.isSound.toggle()
+                                                    soundManager.toggleSound()
+                                                    soundManager.isSoundEnabled = ud.isSoundEnabled()
                                                 }) {
-                                                    Image(cardMenuModel.isSound ? .sound : .soundOff)
+                                                    Image(ud.isSoundEnabled() ? .sound : .soundOff)
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
                                                         .frame(width: 60, height: 60)
@@ -253,18 +262,25 @@ struct CardMenuView: View {
                                         .overlay {
                                             HStack {
                                                 Button(action: {
-                                                    cardMenuModel.isMusic.toggle()
+                                                    soundManager.toggleMusic()
+                                                    
+                                                    if ud.isMusicEnabled() {
+                                                        soundManager.playBackgroundMusic()
+                                                    } else {
+                                                        soundManager.stopBackgroundMusic()
+                                                    }
                                                 }) {
-                                                    Image(cardMenuModel.isMusic ? .music : .musicOff)
+                                                    Image(ud.isMusicEnabled() ? .music : .musicOff)
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
                                                         .frame(width: 60, height: 60)
                                                 }
                                                 
                                                 Button(action: {
-                                                    cardMenuModel.isSound.toggle()
+                                                    soundManager.toggleSound()
+                                                    soundManager.isSoundEnabled = ud.isSoundEnabled()
                                                 }) {
-                                                    Image(cardMenuModel.isSound ? .sound : .soundOff)
+                                                    Image(ud.isSoundEnabled() ? .sound : .soundOff)
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
                                                         .frame(width: 60, height: 60)
@@ -436,6 +452,7 @@ struct CardMenuView: View {
                             .ignoresSafeArea()
                     }
                 }
+            
                 .fullScreenCover(isPresented: $cardMenuModel.isFirstGame) {
                     CardSpiderGameView()
                 }

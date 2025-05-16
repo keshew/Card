@@ -4,6 +4,7 @@ struct CardWinView: View {
     @StateObject var cardWinModel =  CardWinViewModel()
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @State var isMenu = false
+    @ObservedObject private var soundManager = SoundManager.shared
     var body: some View {
         if UIDevice.current.userInterfaceIdiom == .pad {
             if verticalSizeClass == .regular {
@@ -95,6 +96,14 @@ struct CardWinView: View {
                         .padding(.top)
                     }
                     .disabled(UIScreen.main.bounds.height > 390 ? true : false)
+                }
+                .onAppear() {
+                    soundManager.playWinMusic()
+                    soundManager.stopBackgroundMusic()
+                }
+                .onDisappear() {
+                    soundManager.playBackgroundMusic()
+                    soundManager.stopWinMusic()
                 }
                 .fullScreenCover(isPresented: $isMenu) {
                     CardMenuView()

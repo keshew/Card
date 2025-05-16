@@ -38,10 +38,10 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
     var selectedCardColumnIndex: Int?
     var selectedCardRowIndex: Int?
     var foundations: [String: [SolitaireCard]] = [
-        "hearts": [],
-        "diamonds": [],
-        "clubs": [],
-        "spades": []
+        "\(UserDefaultsManager().getSelectedShopItem()?.name ?? "")tiles": [],
+        "\(UserDefaultsManager().getSelectedShopItem()?.name ?? "")pickes": [],
+        "\(UserDefaultsManager().getSelectedShopItem()?.name ?? "")heats": [],
+        "\(UserDefaultsManager().getSelectedShopItem()?.name ?? "")clovers": []
     ]
     var gameStatesStack: [GameState] = []
     var newCardNode: SKSpriteNode?
@@ -63,7 +63,7 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-
+    
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
         size = UIScreen.main.bounds.size
@@ -152,7 +152,7 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         let location = touch.location(in: self)
         card.node?.position = location
     }
-  
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let card = selectedCard else { return }
         let location = touches.first!.location(in: self)
@@ -245,18 +245,18 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         infoBack.name = "infoBack"
         infoBack.position = CGPoint(x: size.width / 1.16, y: size.height / 1.16)
         addChild(infoBack)
-
+        
         let info = SKSpriteNode(imageNamed: "infoGame")
         info.size = CGSize(width: 30, height: 50)
         info.name = "info"
         info.position = CGPoint(x: 0, y: 0)
         infoBack.addChild(info)
-
+        
         let infoLabel = SKSpriteNode(imageNamed: "infoLabel")
         infoLabel.size = CGSize(width: 45, height: 14)
         infoLabel.position = CGPoint(x: 0, y: -50)
         infoBack.addChild(infoLabel)
-
+        
         
         //MARK: - restart
         let restartBack = SKSpriteNode(imageNamed: "backBtnGame")
@@ -264,13 +264,13 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         restartBack.name = "restartBack"
         restartBack.position = CGPoint(x: size.width / 10, y: size.height / 5.5)
         addChild(restartBack)
-
+        
         let restart = SKSpriteNode(imageNamed: "retry")
         restart.size = CGSize(width: 40, height: 40)
         restart.name = "restart"
         restart.position = CGPoint(x: 0, y: 0)
         restartBack.addChild(restart)
-
+        
         let restartLabel = SKSpriteNode(imageNamed: "restartLabel")
         restartLabel.size = CGSize(width: 75, height: 15)
         restartLabel.position = CGPoint(x: 0, y: -50)
@@ -281,18 +281,18 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         hintBack.name = "hintBack"
         hintBack.position = CGPoint(x: size.width / 1.32, y: size.height / 5.5)
         addChild(hintBack)
-
+        
         let hint = SKSpriteNode(imageNamed: "hint")
         hint.size = CGSize(width: 25, height: 35)
         hint.name = "hint"
         hint.position = CGPoint(x: 0, y: 0)
         hintBack.addChild(hint)
-
+        
         let backForCountHint = SKSpriteNode(imageNamed: "backForCount")
         backForCountHint.size = CGSize(width: 35, height: 35)
         backForCountHint.position = CGPoint(x: -25, y: -30)
         hintBack.addChild(backForCountHint)
-
+        
         countHint = SKLabelNode(fontNamed: "Gidugu")
         countHint.attributedText = NSAttributedString(
             string: "\(UserDefaultsManager.defaults.integer(forKey: Keys.hintCount.rawValue))",
@@ -304,29 +304,29 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
             ])
         countHint.position = CGPoint(x: -25, y: -38)
         hintBack.addChild(countHint)
-
+        
         let hintLabel = SKSpriteNode(imageNamed: "hintLabel")
         hintLabel.size = CGSize(width: 55, height: 15)
         hintLabel.position = CGPoint(x: 0, y: -60)
         hintBack.addChild(hintLabel)
-
+        
         let undoBack = SKSpriteNode(imageNamed: "backBtnGame")
         undoBack.size = CGSize(width: 80, height: 80)
         undoBack.name = "undoBack"
         undoBack.position = CGPoint(x: size.width / 1.16, y: size.height / 5.5)
         addChild(undoBack)
-
+        
         let undo = SKSpriteNode(imageNamed: "undo")
         undo.size = CGSize(width: 35, height: 45)
         undo.name = "undo"
         undo.position = CGPoint(x: 0, y: 0)
         undoBack.addChild(undo)
-
+        
         let backForCountUndo = SKSpriteNode(imageNamed: "backForCount")
         backForCountUndo.size = CGSize(width: 35, height: 35)
         backForCountUndo.position = CGPoint(x: -25, y: -30)
         undoBack.addChild(backForCountUndo)
-
+        
         countUndo = SKLabelNode(fontNamed: "Gidugu")
         countUndo.attributedText = NSAttributedString(
             string: "\(UserDefaultsManager.defaults.integer(forKey: Keys.undoCount.rawValue))",
@@ -338,12 +338,12 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
             ])
         countUndo.position = CGPoint(x: -25, y: -38)
         undoBack.addChild(countUndo)
-
+        
         let undoLabel = SKSpriteNode(imageNamed: "undoLabel")
         undoLabel.size = CGSize(width: 55, height: 15)
         undoLabel.position = CGPoint(x: 0, y: -60)
         undoBack.addChild(undoLabel)
-
+        
     }
     
     @objc func updateHintAndUndoLabels() {
@@ -378,10 +378,10 @@ struct CardAgnesGameView: View {
                 .ignoresSafeArea()
                 .navigationBarBackButtonHidden(true)
                 .onChange(of: gameModel.isHintShop) { newValue in
-                        if !newValue {
-                            NotificationCenter.default.post(name: .updateHintAndUndoLabels, object: nil)
-                        }
+                    if !newValue {
+                        NotificationCenter.default.post(name: .updateHintAndUndoLabels, object: nil)
                     }
+                }
                 .onChange(of: gameModel.isUndoShop) { newValue in
                     if !newValue {
                         NotificationCenter.default.post(name: .updateHintAndUndoLabels, object: nil)
