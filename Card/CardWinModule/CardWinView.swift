@@ -202,7 +202,7 @@ struct CardWinView: View {
         } else if width > 1200 {
             return 300
         } else {
-            return 660
+            return 265
         }
     }
 }
