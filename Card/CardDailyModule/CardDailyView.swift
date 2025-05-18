@@ -135,7 +135,7 @@ struct CardDailyView: View {
                                     .frame(width: 120, height: 70)
                                     .overlay {
                                         HStack(spacing: 1) {
-                                            Text("1000")
+                                            Text("\(UserDefaultsManager.defaults.integer(forKey: Keys.money.rawValue))")
                                                 .CustomFont(size: 35, width: 0.4)
                                             
                                             Image(.coin)

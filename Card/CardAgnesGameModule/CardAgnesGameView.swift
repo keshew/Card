@@ -132,15 +132,16 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         }
         
         for (colIdx, column) in columns.enumerated() {
-            if let rowIdx = column.lastIndex(where: { $0.isFaceUp && $0.node?.contains(location) == true }) {
-                selectedCard = columns[colIdx][rowIdx]
-                selectedCardOriginalPosition = selectedCard?.node?.position
+            if let lastCard = column.last, lastCard.isFaceUp, let node = lastCard.node, node.contains(location) {
+                selectedCard = lastCard
+                selectedCardOriginalPosition = node.position
                 selectedCardColumnIndex = colIdx
-                selectedCardRowIndex = rowIdx
-                selectedCard?.node?.zPosition = 200
+                selectedCardRowIndex = column.count - 1
+                node.zPosition = 200
                 break
             }
         }
+
         
         if let _ = nodes.first(where: { $0.name == "dealDeck" }) {
             dealCardFromAdditionalDeck()
