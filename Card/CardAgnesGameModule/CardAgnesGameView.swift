@@ -43,6 +43,8 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         "\(UserDefaultsManager().getSelectedShopItem()?.name ?? "")heats": [],
         "\(UserDefaultsManager().getSelectedShopItem()?.name ?? "")clovers": []
     ]
+    var selectedCardsGroup: [SolitaireCard]? = nil
+    var selectedCardsNodes: [SKSpriteNode]? = nil
     var gameStatesStack: [GameState] = []
     var newCardNode: SKSpriteNode?
     var foundationPiles: [[SolitaireCard]] = Array(repeating: [], count: 4)
@@ -52,7 +54,9 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
     var wasteCards: [SolitaireCard] = []
     var countUndo: SKLabelNode!
     var countHint: SKLabelNode!
-    
+    var selectedCardsGroupOriginalPositions: [CGPoint]? = nil
+    var dealtAdditionalCards: [SolitaireCard] = []
+
     func createMainNode() {
         let gameBackground = SKSpriteNode(imageNamed: "bg")
         gameBackground.size = CGSize(width: size.width, height: size.height)
@@ -75,10 +79,30 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(updateHintAndUndoLabels), name: .updateHintAndUndoLabels, object: nil)
     }
     
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first, let card = selectedCard else { return }
+        let location = touch.location(in: self)
+        if let groupNodes = selectedCardsNodes, groupNodes.count > 1 {
+            for (offset, node) in groupNodes.enumerated() {
+                node.position = CGPoint(x: location.x, y: location.y - CGFloat(offset) * 30)
+            }
+        } else {
+            card.node?.position = location
+        }
+    }
+
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         let nodes = nodes(at: location)
+        
+        for node in nodes {
+            if node.name == "newCard" && additinalCards.isEmpty {
+                resetAdditionalDeck()
+                break
+            }
+        }
         
         if let _ = nodes.first(where: { $0.name == "hint" || $0.name == "hintBack" }) {
             if UserDefaultsManager.defaults.integer(forKey: Keys.hintCount.rawValue) > 0 {
@@ -132,28 +156,48 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         }
         
         for (colIdx, column) in columns.enumerated() {
-            if let lastCard = column.last, lastCard.isFaceUp, let node = lastCard.node, node.contains(location) {
-                selectedCard = lastCard
-                selectedCardOriginalPosition = node.position
-                selectedCardColumnIndex = colIdx
-                selectedCardRowIndex = column.count - 1
-                node.zPosition = 200
-                break
+            for (rowIdx, card) in column.enumerated().reversed() where card.isFaceUp {
+                if let node = card.node, node.contains(location) {
+                    let group = findMovableGroup(from: colIdx, rowIdx: rowIdx)
+                    if group.count > 1 {
+                        selectedCardsGroup = group
+                        selectedCardsNodes = group.compactMap { $0.node }
+                        selectedCardsGroupOriginalPositions = group.compactMap { $0.node?.position }
+                        for (offset, node) in selectedCardsNodes!.enumerated() {
+                            node.zPosition = 200 + CGFloat(offset)
+                        }
+                    } else {
+                        selectedCardsGroup = nil
+                        selectedCardsNodes = nil
+                        selectedCardsGroupOriginalPositions = nil
+                    }
+
+                    selectedCard = card
+                    selectedCardOriginalPosition = node.position
+                    selectedCardColumnIndex = colIdx
+                    selectedCardRowIndex = rowIdx
+                    break
+                }
             }
         }
 
-        
         if let _ = nodes.first(where: { $0.name == "dealDeck" }) {
             dealCardFromAdditionalDeck()
         }
     }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first, let card = selectedCard else { return }
-        let location = touch.location(in: self)
-        card.node?.position = location
+
+    func resetAdditionalDeck() {
+        for child in children {
+            if child.name == "newCard" || child.name == "dealDeck" {
+                child.removeFromParent()
+            }
+        }
+
+        additinalCards.removeAll()
+        createAdditionalColoda()
+        currentNewCard = nil
     }
-    
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let card = selectedCard else { return }
         let location = touches.first!.location(in: self)
@@ -168,6 +212,8 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
                     renderFoundations()
                     currentNewCard = nil
                     selectedCard = nil
+                    selectedCardsGroup = nil
+                    selectedCardsNodes = nil
                     return
                 }
             }
@@ -180,11 +226,15 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
                     renderColumns()
                     currentNewCard = nil
                     selectedCard = nil
+                    selectedCardsGroup = nil
+                    selectedCardsNodes = nil
                     return
                 }
             }
             card.node?.position = selectedCardOriginalPosition ?? .zero
             selectedCard = nil
+            selectedCardsGroup = nil
+            selectedCardsNodes = nil
             return
         }
         
@@ -201,28 +251,57 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
                     selectedCard = nil
                     selectedCardColumnIndex = nil
                     selectedCardRowIndex = nil
+                    selectedCardsGroup = nil
+                    selectedCardsNodes = nil
                     return
                 }
             }
             for i in 0..<columns.count {
                 let columnX = size.width / 4 + CGFloat(i) * (45 + 10)
-                if abs(location.x - columnX) < 45 && canMove(card: card, toColumn: i) {
-                    columns[i].append(card)
-                    columns[colIdx].remove(at: rowIdx)
-                    card.node?.removeFromParent()
-                    flipTopCardIfNeeded(inColumn: colIdx)
-                    removeAllCards()
-                    renderColumns()
-                    selectedCard = nil
-                    selectedCardColumnIndex = nil
-                    selectedCardRowIndex = nil
-                    return
+                if abs(location.x - columnX) < 45 {
+                    if let group = selectedCardsGroup, group.count > 1, canMoveGroup(group: group, toColumn: i) {
+                        columns[i].append(contentsOf: group)
+                        columns[colIdx].removeLast(group.count)
+                        group.forEach { $0.node?.removeFromParent() }
+                        flipTopCardIfNeeded(inColumn: colIdx)
+                        removeAllCards()
+                        renderColumns()
+                        selectedCard = nil
+                        selectedCardColumnIndex = nil
+                        selectedCardRowIndex = nil
+                        selectedCardsGroup = nil
+                        selectedCardsNodes = nil
+                        return
+                    } else if canMove(card: card, toColumn: i) {
+                        columns[i].append(card)
+                        columns[colIdx].remove(at: rowIdx)
+                        card.node?.removeFromParent()
+                        flipTopCardIfNeeded(inColumn: colIdx)
+                        removeAllCards()
+                        renderColumns()
+                        
+                        selectedCard = nil
+                        selectedCardColumnIndex = nil
+                        selectedCardRowIndex = nil
+                        selectedCardsGroup = nil
+                        selectedCardsNodes = nil
+                        return
+                    }
                 }
             }
-            card.node?.position = selectedCardOriginalPosition ?? .zero
+            if let groupNodes = selectedCardsNodes, let groupPositions = selectedCardsGroupOriginalPositions, groupNodes.count == groupPositions.count {
+                for (node, pos) in zip(groupNodes, groupPositions) {
+                    node.position = pos
+                }
+            } else {
+                card.node?.position = selectedCardOriginalPosition ?? .zero
+            }
             selectedCard = nil
             selectedCardColumnIndex = nil
             selectedCardRowIndex = nil
+            selectedCardsGroup = nil
+            selectedCardsNodes = nil
+            selectedCardsGroupOriginalPositions = nil
             return
         }
         
@@ -230,8 +309,10 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         selectedCardOriginalPosition = nil
         selectedCardColumnIndex = nil
         selectedCardRowIndex = nil
+        selectedCardsGroup = nil
+        selectedCardsNodes = nil
     }
-    
+
     func createTappedNode() {
         //MARK: - pause
         let pause = SKSpriteNode(imageNamed: "pauseGame")
@@ -347,6 +428,12 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    func positionForCard(inColumn columnIndex: Int, atRow rowIndex: Int) -> CGPoint {
+        let columnX = size.width / 4 + CGFloat(columnIndex) * (45 + 10)
+        let columnY = size.height - 180 - CGFloat(rowIndex) * 30
+        return CGPoint(x: columnX, y: columnY)
+    }
+    
     @objc func updateHintAndUndoLabels() {
         countHint.attributedText = NSAttributedString(
             string: "\(UserDefaultsManager.defaults.integer(forKey: Keys.hintCount.rawValue))",
@@ -367,6 +454,33 @@ class AgnesGameSpriteKit: SKScene, SKPhysicsContactDelegate {
             ]
         )
     }
+    
+    func canMoveGroup(group: [SolitaireCard], toColumn columnIndex: Int) -> Bool {
+        let targetColumn = columns[columnIndex]
+        guard let firstCard = group.first else { return false }
+        if targetColumn.isEmpty { return true }
+        guard let topCard = targetColumn.last else { return false }
+        return firstCard.rank == topCard.rank - 1 && firstCard.suit != topCard.suit
+    }
+
+    func findMovableGroup(from colIdx: Int, rowIdx: Int) -> [SolitaireCard] {
+        let column = columns[colIdx]
+        guard rowIdx < column.count else { return [] }
+        var group: [SolitaireCard] = [column[rowIdx]]
+        for i in (rowIdx+1)..<column.count {
+            let prev = column[i-1]
+            let curr = column[i]
+            if curr.isFaceUp &&
+                curr.rank == prev.rank - 1 &&
+                curr.suit != prev.suit {
+                group.append(curr)
+            } else {
+                break
+            }
+        }
+        return group
+    }
+
 }
 
 struct CardAgnesGameView: View {

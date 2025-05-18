@@ -118,12 +118,10 @@ extension AgnesGameSpriteKit {
     func dealCardFromAdditionalDeck() {
         guard !additinalCards.isEmpty else { return }
         saveCurrentState()
-        
         var card = additinalCards.removeLast()
         card.node?.removeFromParent()
-        
+
         let texName = textureName(for: card)
-        print(texName)
         let node = SKSpriteNode(imageNamed: texName)
         node.size = CGSize(width: 45, height: 65)
         node.position = CGPoint(x: size.width / 1.85, y: size.height / 9)
@@ -133,13 +131,16 @@ extension AgnesGameSpriteKit {
         card.node = node
         card.isFaceUp = true
         currentNewCard = card
-        
+
+        dealtAdditionalCards.append(card)
+
         for child in children {
             if child.name == "newCard" && child != node {
                 child.removeFromParent()
             }
         }
     }
+
     
     func saveCurrentState() {
         let state = GameState(
@@ -179,7 +180,6 @@ extension AgnesGameSpriteKit {
         }
     }
     
-    
     func restartGame() {
         if let view = self.view {
             let newScene = AgnesGameSpriteKit(size: self.size)
@@ -187,8 +187,6 @@ extension AgnesGameSpriteKit {
             view.presentScene(newScene, transition: .fade(withDuration: 0))
         }
     }
-
-    
     
     func createFourCard() {
         let selectedItem = UserDefaultsManager().getSelectedShopItem()
@@ -225,7 +223,6 @@ extension AgnesGameSpriteKit {
         }
     }
 
-    
     func canPlaceOnFoundation(card: SolitaireCard, foundationIndex: Int) -> Bool {
         guard foundationIndex >= 0 && foundationIndex < foundationPiles.count else {
             return false
@@ -246,7 +243,7 @@ extension AgnesGameSpriteKit {
         var allCards: [SolitaireCard] = []
         for suit in suits {
             for rank in 1...13 {
-                let card = SolitaireCard(name: "\(suit)\(rank)", suit: suit, rank: rank, isFaceUp: false, node: nil)
+                let card = SolitaireCard(name: cardImageName(suit: suit, rank: rank), suit: suit, rank: rank, isFaceUp: false, node: nil)
                 print(card.name)
                 allCards.append(card)
             }
@@ -271,8 +268,17 @@ extension AgnesGameSpriteKit {
         newCardNode.name = "newCard"
         addChild(newCardNode)
     }
-
     
+    func cardImageName(suit: String, rank: Int) -> String {
+        switch rank {
+        case 1: return "\(suit)A"
+        case 11: return "\(suit)Jack"
+        case 12: return "\(suit)Queen"
+        case 13: return "\(suit)King"
+        default: return "\(suit)\(rank)"
+        }
+    }
+
     func createDeck() {
         deck = []
         let selectedItem = UserDefaultsManager().getSelectedShopItem()
