@@ -1,15 +1,84 @@
 import SwiftUI
 
 struct CardMenuView: View {
-    @StateObject var cardMenuModel =  CardMenuViewModel()
+    @EnvironmentObject var cardMenuModel: CardMenuViewModel
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @State var isShop = false
     @ObservedObject private var soundManager = SoundManager.shared
     @State var ud = UserDefaultsManager()
+    let closeTaskPublisher = NotificationCenter.default
+        .publisher(for: NSNotification.Name("closeTask"))
+    let tokenReceivedPublisher = NotificationCenter.default
+        .publisher(for: NSNotification.Name("tokenReceivedPublisher"))
+    @State private var didSetup = false
+    private let setupLock = NSLock()
     
+    func checkAndSetup() {
+        setupLock.lock()
+        defer { setupLock.unlock() }
+
+        let idfa = UserDefaults.standard.string(forKey: "idfa")
+        let fcm = UserDefaults.standard.string(forKey: "fcmToken")
+        print("checkAndSetup called: idfa=\(idfa != nil), fcm=\(fcm != nil), didSetup=\(didSetup)")
+        if idfa != nil && fcm != nil && !didSetup {
+            didSetup = true
+            Task {
+                await cardMenuModel.setup()
+            }
+        }
+    }
+    
+    var isPortrait: Bool {
+        UIScreen.main.bounds.height > UIScreen.main.bounds.width
+    }
+
     var body: some View {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            if verticalSizeClass == .regular {
+            Group {
+            if isPortrait {
+                ZStack {
+                    Image(.bg)
+                        .resizable()
+                        .ignoresSafeArea()
+                    
+                    Image(.shyt)
+                        .resizable()
+                        .frame(width: 580, height: 590)
+                        .scaleEffect(x: -1, y: 1)
+                        .position(x: UIScreen.main.bounds.width / 2.3, y: UIScreen.main.bounds.height / 1.25)
+                    
+                    VStack {
+                        Text("Move the Ipad to the horizontal position")
+                            .CustomFont(size: 50, width: 0.2)
+                    }
+                }
+              
+                .onReceive(tokenReceivedPublisher) { _ in
+                    guard !UserDefaultsManager.isFirstLaunch else { return }
+                    checkAndSetup()
+                }
+
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("idfaReceivedPublisher"))) { _ in
+                    checkAndSetup()
+                }
+                
+                .onReceive(closeTaskPublisher) { _ in
+                    Task {
+                        await MainActor.run {
+                            cardMenuModel.managerKey = nil
+                        }
+                    }
+                }
+                
+                .fullScreenCover(isPresented: .constant(cardMenuModel.managerKey == nil && cardMenuModel.isLoaded == true)) {
+                    CardMenuView()
+                }
+                
+                .fullScreenCover(isPresented: .constant(cardMenuModel.managerKey != nil)) {
+                    CreateAccountManagerView(managerKey: cardMenuModel.managerKey ?? "")
+                        .ignoresSafeArea()
+                }
+            } else {
                 ZStack {
                     Image(.bg)
                         .resizable()
@@ -228,6 +297,33 @@ struct CardMenuView: View {
                             .ignoresSafeArea()
                     }
                 }
+                
+                .onReceive(tokenReceivedPublisher) { _ in
+                    guard !UserDefaultsManager.isFirstLaunch else { return }
+                    checkAndSetup()
+                }
+                
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("idfaReceivedPublisher"))) { _ in
+                    checkAndSetup()
+                }
+                
+                .onReceive(closeTaskPublisher) { _ in
+                    Task {
+                        await MainActor.run {
+                            cardMenuModel.managerKey = nil
+                        }
+                    }
+                }
+                
+                .fullScreenCover(isPresented: .constant(cardMenuModel.managerKey == nil && cardMenuModel.isLoaded == true)) {
+                    CardMenuView()
+                }
+                
+                .fullScreenCover(isPresented: .constant(cardMenuModel.managerKey != nil)) {
+                    CreateAccountManagerView(managerKey: cardMenuModel.managerKey ?? "")
+                        .ignoresSafeArea()
+                }
+                
                 .fullScreenCover(isPresented: $cardMenuModel.isFirstGame) {
                     CardSpiderGameView()
                 }
@@ -237,6 +333,7 @@ struct CardMenuView: View {
                 .fullScreenCover(isPresented: $cardMenuModel.isThirdGame) {
                     CardCarpetGameView()
                 }
+            }
             }
         } else {
             if verticalSizeClass == .compact {
@@ -452,7 +549,33 @@ struct CardMenuView: View {
                             .ignoresSafeArea()
                     }
                 }
-            
+                
+                .onReceive(tokenReceivedPublisher) { _ in
+                    guard !UserDefaultsManager.isFirstLaunch else { return }
+                    checkAndSetup()
+                }
+
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("idfaReceivedPublisher"))) { _ in
+                    checkAndSetup()
+                }
+                
+                .onReceive(closeTaskPublisher) { _ in
+                    Task {
+                        await MainActor.run {
+                            cardMenuModel.managerKey = nil
+                        }
+                    }
+                }
+                
+                .fullScreenCover(isPresented: .constant(cardMenuModel.managerKey == nil && cardMenuModel.isLoaded == true)) {
+                    CardMenuView()
+                }
+                
+                .fullScreenCover(isPresented: .constant(cardMenuModel.managerKey != nil)) {
+                    CreateAccountManagerView(managerKey: cardMenuModel.managerKey ?? "")
+                        .ignoresSafeArea()
+                }
+                
                 .fullScreenCover(isPresented: $cardMenuModel.isFirstGame) {
                     CardSpiderGameView()
                 }
@@ -462,6 +585,50 @@ struct CardMenuView: View {
                 .fullScreenCover(isPresented: $cardMenuModel.isThirdGame) {
                     CardCarpetGameView()
                 }
+            } else {
+                ZStack {
+                    Image(.bg)
+                        .resizable()
+                        .ignoresSafeArea()
+                    
+                    Image(.shyt)
+                        .resizable()
+                        .frame(width: 380, height: 390)
+                        .scaleEffect(x: -1, y: 1)
+                        .position(x: UIScreen.main.bounds.width / 2.3, y: UIScreen.main.bounds.height / 1.38)
+                    
+                    VStack {
+                        Text("Move the phone to the horizontal position")
+                            .CustomFont(size: 30, width: 0.2)
+                    }
+                }
+              
+                .onReceive(tokenReceivedPublisher) { _ in
+                    guard !UserDefaultsManager.isFirstLaunch else { return }
+                    checkAndSetup()
+                }
+
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("idfaReceivedPublisher"))) { _ in
+                    checkAndSetup()
+                }
+                
+                .onReceive(closeTaskPublisher) { _ in
+                    Task {
+                        await MainActor.run {
+                            cardMenuModel.managerKey = nil
+                        }
+                    }
+                }
+                
+                .fullScreenCover(isPresented: .constant(cardMenuModel.managerKey == nil && cardMenuModel.isLoaded == true)) {
+                    CardMenuView()
+                }
+                
+                .fullScreenCover(isPresented: .constant(cardMenuModel.managerKey != nil)) {
+                    CreateAccountManagerView(managerKey: cardMenuModel.managerKey ?? "")
+                        .ignoresSafeArea()
+                }
+                
             }
         }
     }

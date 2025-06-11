@@ -126,6 +126,7 @@ struct CardInfoView: View {
                     }
                     .scrollDisabled(UIScreen.main.bounds.height > 390 ? true : false)
                 }
+                .orientationLock([.landscapeLeft, .landscapeRight])
                 .gesture(
                     DragGesture(minimumDistance: 50)
                         .onChanged { value in
@@ -260,6 +261,7 @@ struct CardInfoView: View {
                     }
                     .scrollDisabled(UIScreen.main.bounds.height > 390 ? true : false)
                 }
+                .orientationLock([.landscapeLeft, .landscapeRight])
                 .gesture(
                     DragGesture(minimumDistance: 50)
                         .onChanged { value in

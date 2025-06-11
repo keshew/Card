@@ -20,6 +20,23 @@ class UserDefaultsManager: ObservableObject {
         ShopItemModel(name: "3", backName: "agnesBackCard", isAvailible: false, isSelected: false)
     ]
     
+    private static let firstLaunchKey = "isFirstLaunch"
+
+    static var isFirstLaunch: Bool {
+        get {
+            !UserDefaults.standard.bool(forKey: firstLaunchKey)
+        }
+        set {
+            UserDefaults.standard.set(!newValue, forKey: firstLaunchKey)
+        }
+    }
+
+    static func firstLaunch() {
+        if UserDefaults.standard.object(forKey: firstLaunchKey) == nil {
+            isFirstLaunch = true
+        }
+    }
+    
     init() {
         firstLaunch()
         

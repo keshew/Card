@@ -5,6 +5,8 @@ struct CardPauseView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Binding var isPause: Bool
     
+    let menuModel = CardMenuViewModel(adjustHandler: AppDelegate().adjustHandler)
+    
     var body: some View {
         if UIDevice.current.userInterfaceIdiom == .pad {
             if verticalSizeClass == .regular {
@@ -98,8 +100,10 @@ struct CardPauseView: View {
                     }
                     .scrollDisabled(UIScreen.main.bounds.height > 390 ? true : false)
                 }
+                .orientationLock([.landscapeLeft, .landscapeRight])
                 .fullScreenCover(isPresented: $cardPauseModel.isMenu) {
                     CardMenuView()
+                        .environmentObject(menuModel)
                 }
             }
         } else {
@@ -192,8 +196,10 @@ struct CardPauseView: View {
                     }
                     .scrollDisabled(UIScreen.main.bounds.height > 390 ? true : false)
                 }
+                .orientationLock([.landscapeLeft, .landscapeRight])
                 .fullScreenCover(isPresented: $cardPauseModel.isMenu) {
                     CardMenuView()
+                        .environmentObject(menuModel)
                 }
             }
         }

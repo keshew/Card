@@ -283,6 +283,7 @@ struct CardSpiderGameView: View {
                 CardShopHintView(isShow: $gameModel.isHintShop)
             }
         }
+        .orientationLock([.landscapeLeft, .landscapeRight])
     }
 }
 

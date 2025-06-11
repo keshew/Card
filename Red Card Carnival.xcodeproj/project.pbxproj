@@ -7,13 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8677C7962DDF441700551258 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8677C7952DDF441700551258 /* GoogleService-Info.plist */; };
+		868755A62DDF5F7A005BB53F /* AdjustSdk in Frameworks */ = {isa = PBXBuildFile; productRef = 868755A52DDF5F7A005BB53F /* AdjustSdk */; };
+		868755A82DDF5F7A005BB53F /* AdjustWebBridge in Frameworks */ = {isa = PBXBuildFile; productRef = 868755A72DDF5F7A005BB53F /* AdjustWebBridge */; };
+		868755AB2DDF5FAF005BB53F /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 868755AA2DDF5FAF005BB53F /* FirebaseCore */; };
+		868755AD2DDF5FAF005BB53F /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 868755AC2DDF5FAF005BB53F /* FirebaseMessaging */; };
+		86AC16D52DE0EA1C006FF7B6 /* AdServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86AC16D42DE0EA1C006FF7B6 /* AdServices.framework */; };
 		86F687BE2DD355E50013ED8D /* CardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F687BB2DD355E50013ED8D /* CardApp.swift */; };
 		86F687C02DD355E50013ED8D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86F687B82DD355E50013ED8D /* Preview Assets.xcassets */; };
 		86F687C12DD355E50013ED8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86F687BA2DD355E50013ED8D /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		86F687A52DD355D90013ED8D /* Card.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Card.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8677C7952DDF441700551258 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8677C7B02DDF466A00551258 /* Card.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Card.entitlements; sourceTree = "<group>"; };
+		86AC16D42DE0EA1C006FF7B6 /* AdServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdServices.framework; path = System/Library/Frameworks/AdServices.framework; sourceTree = SDKROOT; };
+		86F687A52DD355D90013ED8D /* Red Card Carnival.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Red Card Carnival.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86F687B82DD355E50013ED8D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		86F687BA2DD355E50013ED8D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		86F687BB2DD355E50013ED8D /* CardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardApp.swift; sourceTree = "<group>"; };
@@ -113,16 +122,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86AC16D52DE0EA1C006FF7B6 /* AdServices.framework in Frameworks */,
+				868755AD2DDF5FAF005BB53F /* FirebaseMessaging in Frameworks */,
+				868755A62DDF5F7A005BB53F /* AdjustSdk in Frameworks */,
+				868755AB2DDF5FAF005BB53F /* FirebaseCore in Frameworks */,
+				868755A82DDF5F7A005BB53F /* AdjustWebBridge in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		86AC16D32DE0EA1C006FF7B6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				86AC16D42DE0EA1C006FF7B6 /* AdServices.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		86F6879C2DD355D90013ED8D = {
 			isa = PBXGroup;
 			children = (
 				86F687BD2DD355E50013ED8D /* Card */,
+				86AC16D32DE0EA1C006FF7B6 /* Frameworks */,
 				86F687A62DD355D90013ED8D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -130,7 +153,7 @@
 		86F687A62DD355D90013ED8D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				86F687A52DD355D90013ED8D /* Card.app */,
+				86F687A52DD355D90013ED8D /* Red Card Carnival.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -155,6 +178,7 @@
 		86F687BD2DD355E50013ED8D /* Card */ = {
 			isa = PBXGroup;
 			children = (
+				8677C7B02DDF466A00551258 /* Card.entitlements */,
 				869FB6F52DD79C8500AE5254 /* Managers */,
 				86EFC7292DD6294300EDBE94 /* CardCarpetGameModule */,
 				86E14D8E2DD52444004113E9 /* CardAgnesGameModule */,
@@ -175,6 +199,7 @@
 				86F687BA2DD355E50013ED8D /* Assets.xcassets */,
 				86F687BB2DD355E50013ED8D /* CardApp.swift */,
 				86F687CE2DD35FB30013ED8D /* Info.plist */,
+				8677C7952DDF441700551258 /* GoogleService-Info.plist */,
 			);
 			path = Card;
 			sourceTree = "<group>";
@@ -182,9 +207,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		86F687A42DD355D90013ED8D /* Card */ = {
+		86F687A42DD355D90013ED8D /* Red Card Carnival */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 86F687B32DD355DB0013ED8D /* Build configuration list for PBXNativeTarget "Card" */;
+			buildConfigurationList = 86F687B32DD355DB0013ED8D /* Build configuration list for PBXNativeTarget "Red Card Carnival" */;
 			buildPhases = (
 				86F687A12DD355D90013ED8D /* Sources */,
 				86F687A22DD355D90013ED8D /* Frameworks */,
@@ -213,11 +238,15 @@
 				86F6893F2DD3664C0013ED8D /* CardMenuModule */,
 				86F68B1F2DD37A210013ED8D /* CardShopModule */,
 			);
-			name = Card;
+			name = "Red Card Carnival";
 			packageProductDependencies = (
+				868755A52DDF5F7A005BB53F /* AdjustSdk */,
+				868755A72DDF5F7A005BB53F /* AdjustWebBridge */,
+				868755AA2DDF5FAF005BB53F /* FirebaseCore */,
+				868755AC2DDF5FAF005BB53F /* FirebaseMessaging */,
 			);
 			productName = Card;
-			productReference = 86F687A52DD355D90013ED8D /* Card.app */;
+			productReference = 86F687A52DD355D90013ED8D /* Red Card Carnival.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -235,7 +264,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 86F687A02DD355D90013ED8D /* Build configuration list for PBXProject "Card" */;
+			buildConfigurationList = 86F687A02DD355D90013ED8D /* Build configuration list for PBXProject "Red Card Carnival" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -244,12 +273,16 @@
 			);
 			mainGroup = 86F6879C2DD355D90013ED8D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				868755A42DDF5F7A005BB53F /* XCRemoteSwiftPackageReference "ios_sdk" */,
+				868755A92DDF5FAF005BB53F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 86F687A62DD355D90013ED8D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				86F687A42DD355D90013ED8D /* Card */,
+				86F687A42DD355D90013ED8D /* Red Card Carnival */,
 			);
 		};
 /* End PBXProject section */
@@ -261,6 +294,7 @@
 			files = (
 				86F687C02DD355E50013ED8D /* Preview Assets.xcassets in Resources */,
 				86F687C12DD355E50013ED8D /* Assets.xcassets in Resources */,
+				8677C7962DDF441700551258 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,24 +436,28 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Card/Card.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Card/Preview Content\"";
-				DEVELOPMENT_TEAM = 59WWFG63NN;
+				DEVELOPMENT_TEAM = D49T83CQ4B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Card/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Red Card Carnival";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use the data to personalize ads and improve the service";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.keshevv.Card;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.redcardcarnival;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -432,24 +470,28 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Card/Card.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Card/Preview Content\"";
-				DEVELOPMENT_TEAM = 59WWFG63NN;
+				DEVELOPMENT_TEAM = D49T83CQ4B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Card/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Red Card Carnival";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use the data to personalize ads and improve the service";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.keshevv.Card;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.redcardcarnival;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -460,7 +502,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		86F687A02DD355D90013ED8D /* Build configuration list for PBXProject "Card" */ = {
+		86F687A02DD355D90013ED8D /* Build configuration list for PBXProject "Red Card Carnival" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				86F687B12DD355DB0013ED8D /* Debug */,
@@ -469,7 +511,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		86F687B32DD355DB0013ED8D /* Build configuration list for PBXNativeTarget "Card" */ = {
+		86F687B32DD355DB0013ED8D /* Build configuration list for PBXNativeTarget "Red Card Carnival" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				86F687B42DD355DB0013ED8D /* Debug */,
@@ -479,6 +521,48 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		868755A42DDF5F7A005BB53F /* XCRemoteSwiftPackageReference "ios_sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adjust/ios_sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.0;
+			};
+		};
+		868755A92DDF5FAF005BB53F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.13.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		868755A52DDF5F7A005BB53F /* AdjustSdk */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 868755A42DDF5F7A005BB53F /* XCRemoteSwiftPackageReference "ios_sdk" */;
+			productName = AdjustSdk;
+		};
+		868755A72DDF5F7A005BB53F /* AdjustWebBridge */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 868755A42DDF5F7A005BB53F /* XCRemoteSwiftPackageReference "ios_sdk" */;
+			productName = AdjustWebBridge;
+		};
+		868755AA2DDF5FAF005BB53F /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 868755A92DDF5FAF005BB53F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		868755AC2DDF5FAF005BB53F /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 868755A92DDF5FAF005BB53F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 86F6879D2DD355D90013ED8D /* Project object */;
 }

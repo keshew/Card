@@ -97,6 +97,7 @@ struct CardWinView: View {
                     }
                     .disabled(UIScreen.main.bounds.height > 390 ? true : false)
                 }
+                .orientationLock([.landscapeLeft, .landscapeRight])
                 .onAppear() {
                     soundManager.playWinMusic()
                     soundManager.stopBackgroundMusic()
@@ -198,6 +199,7 @@ struct CardWinView: View {
                     }
                     .disabled(UIScreen.main.bounds.height > 390 ? true : false)
                 }
+                .orientationLock([.landscapeLeft, .landscapeRight])
                 .fullScreenCover(isPresented: $isMenu) {
                     CardMenuView()
                 }
